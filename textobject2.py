@@ -1,7 +1,11 @@
+# Import modules:
+
+# Textwrap for wrapping text (go figure ;)
+# MyCanvas for editing PDFs
 import textwrap
 from mycanvas import MyCanvas
 
-
+# Default values for a TextObject
 class TextObject2:
     x = 0
     y = 0
@@ -15,6 +19,7 @@ class TextObject2:
     spacing = 9
     reverse_font = "Helvetica"
 
+    # Initialize default values for a TextObject
     def __init__(self, x, y, canvas, text, reverse, reverse_font):
         self.x = x
         self.y = y
@@ -26,12 +31,14 @@ class TextObject2:
         self.reverse_font = reverse_font
         self.reverse_list = self.reverse_list()
 
+    # Format description string to fit within PDF box
     def __str__(self):
         wrapped_string = textwrap.fill(self.text, self.line_char_count)
         dedented_string = textwrap.dedent(wrapped_string)
         formatted_string = dedented_string.replace("\n", "\n")
         return formatted_string
 
+    # Format reverse description string to fit within PDF box
     def reversed(self):
         if self.reverse_font == "Courier-Bold":
             wrapped_string = textwrap.fill(self.reverse, 32)
@@ -43,14 +50,17 @@ class TextObject2:
         formatted_string = dedented_string.replace("\n", "\n")
         return formatted_string
 
+    # Split the description string into a list by line
     def text_list(self):
         formatted_string = self.__str__()
         return formatted_string.split("\n")
 
+    # Split the reverse description string into a list by line
     def reverse_list(self):
         formatted_string = self.reversed()
         return formatted_string.split("\n")
 
+    # Choose appropriate font size based on number of characters in string, as well as font type
     def font_size(self):
         char_count = len(self.text)
         line_char_count = 22  # 21
@@ -88,12 +98,13 @@ class TextObject2:
 
         return font_size, line_char_count, spacing
 
+    # Print the description string to the PDF
     def print_string(self):
         for line in self.text_list:
             self.canvas.drawCentredString(self.x, self.y, line)
-            # self.y -= 9
             self.y -= self.spacing
 
+    # Print the reverse description string to the PDF
     def print_reverse(self):
         self.y -= 5
         self.canvas.setFont("Helvetica", 5)
